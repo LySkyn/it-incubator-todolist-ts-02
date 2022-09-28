@@ -1,63 +1,201 @@
 import React, {useState} from 'react';
 import './App.css';
 import {Todolist} from './Todolist';
-import {TaskType} from "./Todolist";
+import {v1} from 'uuid';
 
-export type FilterValuesType =  'all' | 'active' | 'completed'
+
+type ObjectType = {
+    title: string
+    filter: FilterValuesType
+    tasks: Array<TasksType>
+    students: Array<string>
+}
+export type TasksType = {
+    taskId: string
+    title: string
+    isDone: boolean
+}
+
+export type FilterValuesType = "all" | "active" | "completed";
+
 
 function App() {
 
-    // let tasks1 = [
-    //     {id: 1, title: "HTML&CSS", isDone: true},
-    //     {id: 2, title: "JS", isDone: true},
-    //     {id: 3, title: "ReactJS", isDone: false},
-    //     {id: 4, title: "ReactJS2", isDone: false}
-    // ]
-    let [tasks1, setTask1] = useState([
-        {id: 1, title: "HTML&CSS", isDone: true}, //0
-        {id: 2, title: "JS", isDone: true}, //1
-        {id: 3, title: "ReactJS", isDone: false}, //2
-        {id: 4, title: "ReactJS2", isDone: false} //3
+    const [todo, setTodo] = useState<Array<ObjectType>>([
+        {
+            title: "What to learn",
+            filter: "all",
+            tasks: [
+                {taskId: v1(), title: "HTML&CSS", isDone: true},
+                {taskId: v1(), title: "JS", isDone: true}
+            ],
+            students: [
+                'Rick Kane',
+                'Finnlay Bentley',
+                'Samia North',
+                'Isaac Morton',
+                'Lily-Ann Clifford',
+                'Thalia Park',
+                'Sapphire Cruz',
+                'Cieran Vazquez',
+                'Anya Estes',
+                'Dominika Field',
+                'Rosanna Chung',
+                'Safiyah Davey',
+                'Ryley Beasley',
+                'Kalvin Trejo',
+                'Evie-Mae Farrell',
+                'Juliet Valencia',
+                'Astrid Austin',
+                'Lyle Montgomery',
+                'Nisha Mora',
+                'Kylie Callaghan',
+                'Star Wilks',
+                'Marissa Colley',
+                'Asa Fuller',
+                'Leigh Kemp',
+                'Avleen Dawson',
+                'Sammy Bonilla',
+                'Acacia Becker',
+                'Coral Shepherd',
+                'Melina Molina',
+                'Kiran Bailey',
+                'Clara Escobar',
+                'Alexandru Horn',
+                'Brandon-Lee Mercado',
+                'Elouise Weston',
+                'King Long',
+                'Kerri Searle',
+                'Kanye Hamer',
+                'Elwood Benitez',
+                'Mikail Whitaker',
+                'Bobby Hardy',
+                'Talha Ferry',
+                'Priscilla Landry',
+                'Olivia-Grace Cain',
+                'Kiaan Wallace',
+                'Wesley Padilla90',
+                'Ella-Grace Wooten91',
+                'Kaif Molloy92',
+                'Kamal Broadhurst93',
+                'Bianca Ferrell94',
+                'Micheal Talbot95',
+            ]
+        },
+        {
+            title: "What to do",
+            filter: "all",
+            tasks: [
+                {taskId: v1(), title: "HTML&CSS2", isDone: true},
+                {taskId: v1(), title: "JS2", isDone: true}
+            ],
+            students: [
+                'Jago Wormald1',
+                'Saul Milne2',
+                'Aariz Hester3',
+                'Dion Reeve4',
+                'Anisa Ortega5',
+                'Blade Cisneros6',
+                'Malaikah Phelps7',
+                'Zeeshan Gallagher8',
+                'Isobella Vo9',
+                'Rizwan Mathis10',
+                'Menaal Leach11',
+                'Kian Walton12',
+                'Orion Lamb13',
+                'Faizah Huynh14',
+                'Crystal Vaughan15',
+                'Vivien Hickman16',
+                'Stuart Lu17',
+                'Karol Davison18',
+                'Dario Burns19',
+                'Chloe Rich20',
+                'Martyna Felix',
+                'Nida Glass',
+                'Maeve Miles',
+                'Hasnain Puckett',
+                'Ayman Cano',
+                'Safwan Perry',
+                'Fox Kelly',
+                'Louise Barlow',
+                'Malaki Mcgill',
+                'Leanna Cline',
+                'Willard Hodge',
+                'Amelia Dorsey',
+                'Kiah Porter',
+                'Jeanne Daly',
+                'Mohsin Armstrong',
+                'Laurie Rangel',
+                'Princess Tierney',
+                'Kasim Kendall',
+                'Darryl Cope',
+                'Elysha Ray',
+                'Liyana Harris',
+                'Kashif Blackburn',
+                'Atif Zimmerman',
+                'Sila Hartley',
+                'Ralphie Hebert',
+            ]
+        }
     ])
 
-    const [filter, setFilter] = useState<FilterValuesType>('all')
-
-    const removeTask = (taskID: number) => {
-        setTask1(tasks1.filter((el) => el.id !== taskID))
+    function removeTask(taskId: string, todolistId: number) {
+        setTodo(todo.map((el, index) => index === todolistId ? {
+            ...el,
+            tasks: [...el.tasks.filter(fl => fl.taskId !== taskId)]
+        } : el))
     }
 
-    const changeFilter = (filter: FilterValuesType) => {
-        setFilter(filter)
+    function addTask(title: string, todolistId: number) {
+        let newTask: TasksType = {taskId: v1(), title: title, isDone: false};
+        setTodo(todo.map((el, index) => index === todolistId ? {...el, tasks: [newTask, ...el.tasks]} : el))
     }
-    const getTasksForTodolist = () => {
 
-        switch (filter) {
-            case "active":
-                return tasks1.filter(t => !t.isDone)
-            case "completed":
-                return tasks1.filter(t => t.isDone)
-            default:
-                return tasks1
-        }
-        //     let tasksForTodolist = tasks1
-        //
-        //     if (filter === 'active') {
-        //         tasksForTodolist = tasks1.filter(t => !t.isDone)
-        //     } // ===false
-        //     if (filter === 'completed') {
-        //         tasksForTodolist = tasks1.filter(t => t.isDone)
-        //     } // ===true
-        // return tasksForTodolist
+    function changeStatus(taskId: string, isDone: boolean, todolistId: number) {
+        setTodo(todo.map((el, index) => index === todolistId ? {
+            ...el,
+            tasks: el.tasks.map(m => m.taskId === taskId ? {...m, isDone: isDone} : m)
+        } : el))
+    }
+
+    function changeFilter(value: FilterValuesType, todolistId: number) {
+        setTodo(todo.map((el, index) => index === todolistId ? {...el, filter: value} : el))
+    }
+
+    function removeTodolist(todolistId: number) {
+        setTodo(todo.filter((el, index) => index !== todolistId))
     }
 
     return (
-
         <div className="App">
-            <Todolist
-                title="What to learn"
-                tasks={getTasksForTodolist()}
-                removeTask={removeTask}
-                changeFilter={changeFilter}/>
+            {
+                todo.map((tl, index) => {
+                    let allTodolistTasks = tl.tasks;
+                    let tasksForTodolist = allTodolistTasks;
+
+                    if (tl.filter === "active") {
+                        tasksForTodolist = allTodolistTasks.filter(t => t.isDone === false);
+                    }
+                    if (tl.filter === "completed") {
+                        tasksForTodolist = allTodolistTasks.filter(t => t.isDone === true);
+                    }
+
+                    return <Todolist
+                        key={index}
+                        id={index}
+                        title={tl.title}
+                        tasks={tasksForTodolist}
+                        students={tl.students}
+                        removeTask={removeTask}
+                        changeFilter={changeFilter}
+                        addTask={addTask}
+                        changeTaskStatus={changeStatus}
+                        filter={tl.filter}
+                        removeTodolist={removeTodolist}
+                    />
+                })
+            }
+
         </div>
     );
 }
